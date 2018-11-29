@@ -100,7 +100,11 @@ def execute_rules(rules, simulate):
                 path = job.path
                 basedir = job.basedir
                 relative_path = path.relative_to(basedir)
-                puts('File %s:' % bold(relative_path))
+                # handle non-ascii characters in files before sending to colorama
+                try:
+                    puts('File %s:' % bold(relative_path))
+                except:
+                    puts('File %s:' % bold(relative_path.name.encode('punycode')))
                 with indent(2):
                     attrs = filter_pipeline(job)
                     attrs['path'] = path
